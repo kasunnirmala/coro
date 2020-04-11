@@ -42,7 +42,7 @@ def serial_ports():
 
 # Dictionary with options
 tempchoi = serial_ports()
-choices = {i : tempchoi[i] for i in range(0, len(tempchoi) )}
+choices = { i : 5 for i in tempchoi}
 tkvar.set('Select COM') # set the default option
 
 popupMenu = OptionMenu(mainframe, tkvar, *choices)
