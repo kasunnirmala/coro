@@ -8,9 +8,7 @@ while True:
     cc=str(ser.readline())
     print(cc)
     ss=(cc[2:3])
-    
-    keyboard.press(Key.up)
-    keyboard.release(Key.up)
+ 
     while not ser.inWaiting():
         print(ss)
 
