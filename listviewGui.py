@@ -5,6 +5,7 @@ import tkinter as ttk
 import sys
 import glob
 import serial
+from pynput.keyboard import Key, Controller
 
 root = Tk()
 root.title("Tk dropdown example")
@@ -40,17 +41,57 @@ def serial_ports():
             pass
     return result
 
+#running the connection script for remote
+def con_serial(comein):
+
+    ser = serial.Serial(comein, 9600)
+    
+    release = True
+
+    while True:
+        bytesToRead = ser.inWaiting()
+        keyboard = Controller()
+        cc=str(ser.readline())
+        print(cc)
+        ss=(cc[2:3])
+     
+        while not ser.inWaiting():
+            print(ss)
+
+            if ss=='U':
+                release =True
+                keyboard.press(Key.up)
+            elif ss== 'D':
+                release =True
+                keyboard.press(Key.down)
+            elif ss=='L':
+                release =True
+                keyboard.press(Key.left)
+            elif ss=='R':
+                release =True
+                keyboard.press(Key.right)
+            elif ss=='S':
+                if release:
+                    release=False
+                    keyboard.release(Key.down)
+                    keyboard.release(Key.left)
+                    keyboard.release(Key.up)
+                    keyboard.release(Key.right)
+                    keyboard = Controller()
+                
 # Dictionary with options
 tempchoi = serial_ports()
 choices = { i : 5 for i in tempchoi}
 tkvar.set('Select COM') # set the default option
 
+#popup menu for selection/ view of dropdown menu
 popupMenu = OptionMenu(mainframe, tkvar, *choices)
 Label(mainframe, text="Choose a COM Port").grid(row = 1, column = 1)
 popupMenu.grid(row = 2, column =1)
 
 # on change dropdown value
 def change_dropdown(*args):
+    con_serial(tkvar.get())
     print( tkvar.get() )
 
 # link function to change dropdown
