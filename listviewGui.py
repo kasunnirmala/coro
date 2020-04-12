@@ -7,6 +7,8 @@ import glob
 import serial
 from pynput.keyboard import Key, Controller
 
+from threading import Thread
+
 root = Tk()
 root.title("Tk dropdown example")
 
@@ -43,11 +45,11 @@ def serial_ports():
 
 #running the connection script for remote
 def con_serial(comein):
-
+    print(comein + "  AAAAAAA")
     ser = serial.Serial(comein, 9600)
     
     release = True
-    '''
+    
     while True:
         bytesToRead = ser.inWaiting()
         keyboard = Controller()
@@ -78,36 +80,38 @@ def con_serial(comein):
                     keyboard.release(Key.up)
                     keyboard.release(Key.right)
                     keyboard = Controller()
-    '''
-    bytesToRead = ser.inWaiting()
-    keyboard = Controller()
-    cc=str(ser.readline())
-    print(cc)
-    ss=(cc[2:3])
+    
+    
+    # bytesToRead = ser.inWaiting()
+    # keyboard = Controller()
+    # cc=str(ser.readline())
+    # print(cc)
+    # ss=(cc[2:3])
      
-    while not ser.inWaiting():
-        print(ss)
+    # while not ser.inWaiting():
+    #     print(ss)
 
-        if ss=='U':
-            release =True
-            keyboard.press(Key.up)
-        elif ss== 'D':
-            release =True
-            keyboard.press(Key.down)
-        elif ss=='L':
-            release =True
-            keyboard.press(Key.left)
-        elif ss=='R':
-            release =True
-            keyboard.press(Key.right)
-        elif ss=='S':
-            if release:
-                release=False
-                keyboard.release(Key.down)
-                keyboard.release(Key.left)
-                keyboard.release(Key.up)
-                keyboard.release(Key.right)
-                keyboard = Controller()
+    #     if ss=='U':
+    #         release =True
+    #         keyboard.press(Key.up)
+    #     elif ss== 'D':
+    #         release =True
+    #         keyboard.press(Key.down)
+    #     elif ss=='L':
+    #         release =True
+    #         keyboard.press(Key.left)
+    #     elif ss=='R':
+    #         release =True
+    #         keyboard.press(Key.right)
+    #     elif ss=='S':
+    #         if release:
+    #             release=False
+    #             keyboard.release(Key.down)
+    #             keyboard.release(Key.left)
+    #             keyboard.release(Key.up)
+    #             keyboard.release(Key.right)
+    #             keyboard = Controller()
+
                 
 # Dictionary with options
 tempchoi = serial_ports()
@@ -121,7 +125,12 @@ popupMenu.grid(row = 2, column =1)
 
 # on change dropdown value
 def change_dropdown(*args):
-    con_serial(tkvar.get())
+    try:
+        thread=Thread(target=con_serial, args=(tkvar.get(),))
+        thread.start()
+    except Exception as identifier:
+        print(identifier)
+    # con_serial(tkvar.get())
     print( tkvar.get() )
 
 # link function to change dropdown
