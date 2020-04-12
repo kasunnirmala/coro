@@ -81,7 +81,7 @@ def con_serial(comein):
                 
 # Dictionary with options
 tempchoi = serial_ports()
-choices = { i : 5 for i in tempchoi}
+choices = { i : 5 for i in tempchoi} #converting list to dictionary
 tkvar.set('Select COM') # set the default option
 
 #popup menu for selection/ view of dropdown menu
