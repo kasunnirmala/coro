@@ -49,7 +49,11 @@ def con_serial(comein):
     ser = serial.Serial(comein, 9600)
     
     release = True
+<<<<<<< HEAD
     
+=======
+    '''
+>>>>>>> origin/design
     while True:
         bytesToRead = ser.inWaiting()
         keyboard = Controller()
@@ -80,6 +84,7 @@ def con_serial(comein):
                     keyboard.release(Key.up)
                     keyboard.release(Key.right)
                     keyboard = Controller()
+<<<<<<< HEAD
     
     
     # bytesToRead = ser.inWaiting()
@@ -112,6 +117,38 @@ def con_serial(comein):
     #             keyboard.release(Key.right)
     #             keyboard = Controller()
 
+=======
+    '''
+    bytesToRead = ser.inWaiting()
+    keyboard = Controller()
+    cc=str(ser.readline())
+    print(cc)
+    ss=(cc[2:3])
+     
+    while not ser.inWaiting():
+        print(ss)
+
+        if ss=='U':
+            release =True
+            keyboard.press(Key.up)
+        elif ss== 'D':
+            release =True
+            keyboard.press(Key.down)
+        elif ss=='L':
+            release =True
+            keyboard.press(Key.left)
+        elif ss=='R':
+            release =True
+            keyboard.press(Key.right)
+        elif ss=='S':
+            if release:
+                release=False
+                keyboard.release(Key.down)
+                keyboard.release(Key.left)
+                keyboard.release(Key.up)
+                keyboard.release(Key.right)
+                keyboard = Controller()
+>>>>>>> origin/design
                 
 # Dictionary with options
 tempchoi = serial_ports()
