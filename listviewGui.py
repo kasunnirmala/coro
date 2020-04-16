@@ -44,7 +44,7 @@ def serial_ports():
 
 #running the connection script for remote
 def con_serial(comein):
-    file1 = open("locater.txt","w")
+    file1 = open("locater.txt","r")
     locater = file1.read()
     if(locater != ""):
         print(locater)
