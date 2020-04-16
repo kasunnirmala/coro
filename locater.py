@@ -22,7 +22,6 @@ file1 = open("locater.txt","r")
 locater = str(file1.read())
 boxsize = len(locater)
 
-#subprocess.call(['C:\Program Files (x86)\Ezviz Studio\EzvizStudio.exe'])
 if(locater == ""):
     print("its empty")
 else:

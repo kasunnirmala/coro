@@ -1,5 +1,6 @@
 from tkinter import *
 import tkinter as ttk
+from tkinter import filedialog
 
 import sys
 import glob
@@ -90,6 +91,15 @@ tempchoi = serial_ports()
 choices = { i : 5 for i in tempchoi} #converting list to dictionary
 tkvar.set('Select COM') # set the default option
 
+#FileBrowser
+def fileDialog():
+        root.filename = filedialog.askopenfilename(initialdir =  "/", title = "Select A File", filetype =
+        (("exe files","*.exe"),("all files","*.*")) )
+        print(str(root.filename))
+        #root.label = ttk.Label(root.labelFrame, text = "")
+        ttk.Label.grid(column = 1, row = 2)
+        #ttk.Label.configure(text = ttk.filename)
+        
 #popup menu for selection/ view of dropdown menu
 popupMenu = OptionMenu(mainframe, tkvar, *choices)
 Label(mainframe, text="Choose a COM Port").grid(row = 3, column = 1)
@@ -110,8 +120,9 @@ else:
     print(locater)
 file1.close()
 
-ttk.Button(mainframe, text = "Locate").grid(row = 2, column = 0, sticky = ttk.W, pady = 4)
-ttk.Button(mainframe, text = "Load").grid(row = 2, column = 1)
+ttk.Button(mainframe, text = "Locate", command = fileDialog).grid(row = 2, column = 0, sticky = ttk.W, pady = 4)
+ttk.Button(mainframe, text = "Load").grid(row = 2, column = 1)      
+
 
 # on change dropdown value
 def change_dropdown(*args):
@@ -120,23 +131,6 @@ def change_dropdown(*args):
         thread.start()
     except Exception as identifier:
         print(identifier)
-
-    '''ttk.Label(mainframe, text="Enter Location").grid(row=1)
-    e1 = ttk.Entry(mainframe)
-    e1.grid(row = 1, column = 1)
-
-    file1 = open("locater.txt","r")
-    locater = str(file1.read())
-    boxsize = len(locater)
-    if(locater == ""):
-        print("its empty")
-    else:
-        e1.insert(boxsize,locater)
-        print(locater)
-    file1.close()
-
-    ttk.Button(mainframe, text = "Locate").grid(row = 2, column = 0, sticky = ttk.W, pady = 4)
-    ttk.Button(mainframe, text = "Load").grid(row = 2, column = 1)'''
     print( tkvar.get() )
     
 
