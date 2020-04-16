@@ -1,14 +1,15 @@
 from tkinter import *
 import tkinter as ttk
-#from ttk import *
 
 import sys
 import glob
 import serial
 from pynput.keyboard import Key, Controller
 
+from threading import Thread
+
 root = Tk()
-root.title("Tk dropdown example")
+root.title("Project KDU")
 
 # Add a grid
 mainframe = Frame(root)
@@ -43,11 +44,15 @@ def serial_ports():
 
 #running the connection script for remote
 def con_serial(comein):
-
+    file1 = open("locater.txt","w")
+    locater = file1.read()
+    if(locater != ""):
+        print(locater)
+    print(comein + "  AAAAAAA")
     ser = serial.Serial(comein, 9600)
     
     release = True
-
+    
     while True:
         bytesToRead = ser.inWaiting()
         keyboard = Controller()
@@ -78,6 +83,7 @@ def con_serial(comein):
                     keyboard.release(Key.up)
                     keyboard.release(Key.right)
                     keyboard = Controller()
+
                 
 # Dictionary with options
 tempchoi = serial_ports()
@@ -86,13 +92,53 @@ tkvar.set('Select COM') # set the default option
 
 #popup menu for selection/ view of dropdown menu
 popupMenu = OptionMenu(mainframe, tkvar, *choices)
-Label(mainframe, text="Choose a COM Port").grid(row = 1, column = 1)
-popupMenu.grid(row = 2, column =1)
+Label(mainframe, text="Choose a COM Port").grid(row = 3, column = 1)
+popupMenu.grid(row = 4, column =1)
+
+ttk.Label(mainframe, text="Enter Location").grid(row=1)
+e1 = ttk.Entry(mainframe)
+e1.grid(row = 1, column = 1)
+
+file1 = open("locater.txt","r")
+locater = str(file1.read())
+boxsize = len(locater)
+
+if(locater == ""):
+    print("its empty")
+else:
+    e1.insert(boxsize,locater)
+    print(locater)
+file1.close()
+
+ttk.Button(mainframe, text = "Locate").grid(row = 2, column = 0, sticky = ttk.W, pady = 4)
+ttk.Button(mainframe, text = "Load").grid(row = 2, column = 1)
 
 # on change dropdown value
 def change_dropdown(*args):
-    con_serial(tkvar.get())
+    try:
+        thread=Thread(target=con_serial, args=(tkvar.get(),))
+        thread.start()
+    except Exception as identifier:
+        print(identifier)
+
+    '''ttk.Label(mainframe, text="Enter Location").grid(row=1)
+    e1 = ttk.Entry(mainframe)
+    e1.grid(row = 1, column = 1)
+
+    file1 = open("locater.txt","r")
+    locater = str(file1.read())
+    boxsize = len(locater)
+    if(locater == ""):
+        print("its empty")
+    else:
+        e1.insert(boxsize,locater)
+        print(locater)
+    file1.close()
+
+    ttk.Button(mainframe, text = "Locate").grid(row = 2, column = 0, sticky = ttk.W, pady = 4)
+    ttk.Button(mainframe, text = "Load").grid(row = 2, column = 1)'''
     print( tkvar.get() )
+    
 
 # link function to change dropdown
 tkvar.trace('w', change_dropdown)
