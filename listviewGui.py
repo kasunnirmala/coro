@@ -1,17 +1,18 @@
 from tkinter import *
 import tkinter as ttk
 from tkinter import filedialog
-
+import subprocess
 import sys
 import glob
 import serial
 from pynput.keyboard import Key, Controller
 
 from threading import Thread
+import os
 
 root = Tk()
 root.title("Project KDU")
-
+thread=Thread()
 # Add a grid
 mainframe = Frame(root)
 mainframe.grid(column=0,row=0, sticky=(N,W,E,S) )
@@ -21,6 +22,14 @@ mainframe.pack(pady = 100, padx = 100)
 
 # Create a Tkinter variable
 tkvar = StringVar(root)
+
+
+def openfile():
+    file1 = open("locater.txt","r")
+    ss = file1.read()
+    
+    thread2=Thread(target=subprocess.call, args=([[ss]],))
+    thread2.start()
 
 #getting serial ports
 def serial_ports():
@@ -95,11 +104,27 @@ tkvar.set('Select COM') # set the default option
 def fileDialog():
         root.filename = filedialog.askopenfilename(initialdir =  "/", title = "Select A File", filetype =
         (("exe files","*.exe"),("all files","*.*")) )
-        print(str(root.filename))
+        print(str(root.filename).replace("/","\\\\"))
+        ss=str(root.filename).replace("/","\\\\")
+        f = open("locater.txt", "w")
+        f.write(ss)
+        f.close()
+        
+        thread2=Thread(target=subprocess.call, args=([[ss]],))
+        thread2.start()
+        
+        # subprocess.call(['C:\\Program Files\\Notepad++\\notepad++.exe'])
+        # os.system('C:\Program Files\Notepad++\notepad++.exe')
         #root.label = ttk.Label(root.labelFrame, text = "")
-        ttk.Label.grid(column = 1, row = 2)
+        # ttk.Label.grid(column = 1, row = 2)
         #ttk.Label.configure(text = ttk.filename)
         
+        
+def disconnect():
+    
+    os.system("TASKKILL /F /IM EzvizStudio.exe")
+    thread.kill()
+
 #popup menu for selection/ view of dropdown menu
 popupMenu = OptionMenu(mainframe, tkvar, *choices)
 Label(mainframe, text="Choose a COM Port").grid(row = 3, column = 1)
@@ -121,8 +146,8 @@ else:
 file1.close()
 
 ttk.Button(mainframe, text = "Locate", command = fileDialog).grid(row = 2, column = 0, sticky = ttk.W, pady = 4)
-ttk.Button(mainframe, text = "Load").grid(row = 2, column = 1)      
-
+ttk.Button(mainframe, text = "Load",command=openfile).grid(row = 2, column = 1)      
+ttk.Button(mainframe, text = "disconnect",command=disconnect).grid(row = 4, column = 0)   
 
 # on change dropdown value
 def change_dropdown(*args):

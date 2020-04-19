@@ -1,1 +1,1 @@
-C:\Windows\System32\cmd.exe
+C:\\Program Files (x86)\\Ezviz Studio\\EzvizStudio.exe
